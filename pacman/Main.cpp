@@ -63,11 +63,56 @@ void Update() {
 		ClearScreen();
 	}
 }
+void PrintPersonaje()
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x6);
+	cout << personaje;
+}
 void ImprimirPantalla() {
+	for (int i = 0; i < CONSOLE_HEIGHT; i++)
+	{
+		for (int j = 0; j < CONSOLE_WIDTH; j++)
+		{
+			if (personaje_y == i && personaje_x == j) {
+				PrintPersonaje();
+			}
+			else {
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
+				cout << (char)ConsoleScreen[i][j];
+			}
 
+		}
+		cout << endl;
+	}
 }
 void Inputs() {
-
+	char input = toupper(_getch());
+	cout << input;
+	switch (input)
+	{
+	case 'H':
+	case 'W':
+		inputs = INPUTS::UP;
+		break;
+	case 'A':
+	case 'K':
+		inputs = INPUTS::LEFT;
+		break;
+	case 'S':
+	case 'P':
+		inputs = INPUTS::DOWN;
+		break;
+	case 'M':
+	case 'D':
+		inputs = INPUTS::RIGHT;
+		break;
+	case 'Q':
+		inputs = INPUTS::QUIT;
+		break;
+	default:
+		inputs = INPUTS::NONE;
+		break;
+	}
 }
 void Logica() {
 	switch (inputs)
@@ -184,5 +229,5 @@ void Logica() {
 	}
 }
 void ClearScreen() {
-
+	COORD cursorPosition;	cursorPosition.X = 0;	cursorPosition.Y = 0;	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }
