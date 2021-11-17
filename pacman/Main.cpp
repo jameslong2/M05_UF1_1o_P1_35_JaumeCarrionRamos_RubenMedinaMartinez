@@ -62,15 +62,16 @@ int main() {
 void Update() {
 	AddPointsToTotal();
 	while (ejecutar) {
+		
+		ClearScreen();
+		ImprimirPantalla();
+		Inputs();
+		Logica();
+		ShowScore();
 		if (totalScore <= 0) {
 			isWin = true;
 			ejecutar = false;
 		}
-		ClearScreen();
-		ImprimirPantalla();
-		ShowScore();
-		Inputs();
-		Logica();
 	}
 	if (isWin) {
 		PrintWinText();
