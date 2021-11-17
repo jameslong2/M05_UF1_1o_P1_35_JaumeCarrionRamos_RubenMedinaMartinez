@@ -75,7 +75,8 @@ void Update() {
 	}
 	if (isWin) {
 		PrintWinText();
-		_getch();
+		char x;
+		cin >> x;
 	}
 }
 void PrintWinText() {
