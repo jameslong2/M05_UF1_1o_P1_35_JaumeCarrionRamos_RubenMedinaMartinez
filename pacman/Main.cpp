@@ -1,10 +1,17 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
+#include <stdio.h>
 using namespace std;
 #define CONSOLE_HEIGHT 29
 #define CONSOLE_WIDTH 119
+/// <summary>
+/// Estos son los caracteres del mapa
+/// </summary>
 enum MAP_TILES { EMPTY = ' ', WALL = char(219), PUNTO = '*' };
+/// <summary>
+/// estos son los inputs disponibles
+/// </summary>
 enum INPUTS { NONE, UP, DOWN, RIGHT, LEFT, QUIT };
 char personaje = char(254);
 int personaje_x = 58;
@@ -54,11 +61,18 @@ void Update();
 void ShowScore();
 void AddPointsToTotal();
 void PrintWinText();
+/// <summary>
+/// El main ejecuta la funcion Update.
+/// </summary>
 int main() {
-
 	Update();
 
 }
+/// <summary>
+/// El Update ejecuta la funcion AddPointsToTotal y un bucle while que no para de ejecutar las funciones de Inputs,
+/// Logica, ClearScreen, ImprimirPantalla, ShowScore hasta que el totalScore llegue a 0, tambien una vez llegado a 0
+/// muestra en pantalla el mensaje de "You Win" y "press any key to close".
+/// </summary>
 void Update() {
 	AddPointsToTotal();
 	while (ejecutar) {
@@ -78,10 +92,13 @@ void Update() {
 		cin >> x;
 	}
 }
+/// <summary>
+/// PrintWinText se encarga de enseñar por consola el texto
+/// you win, y te permite poner un caracter para cerrar consola.
+/// </summary>
 void PrintWinText() {
 	cout << endl;
-	cout << R"(
-____    ____  ______    __    __     ____    __    ____  __  .__   __. 
+	cout << R"(____    ____  ______    __    __     ____    __    ____  __  .__   __. 
 \   \  /   / /  __  \  |  |  |  |    \   \  /  \  /   / |  | |  \ |  | 
  \   \/   / |  |  |  | |  |  |  |     \   \/    \/   /  |  | |   \|  | 
   \_    _/  |  |  |  | |  |  |  |      \            /   |  | |  . `  | 
@@ -90,6 +107,10 @@ ____    ____  ______    __    __     ____    __    ____  __  .__   __.
                                                                        )"<<endl;
 	cout << "press any key to close" << endl;
 }
+/// <summary>
+/// AddPointsToTotal es una funcion la cual se encarga de sumar puntos al Score cuando el personaje se encuentra 
+/// con un punto.
+/// </summary>
 void AddPointsToTotal() {
 	for (int i = 0; i < CONSOLE_HEIGHT; i++)
 	{
@@ -101,11 +122,17 @@ void AddPointsToTotal() {
 		}
 	}
 }
+/// <summary>
+/// PrintPersonaje es la funcion que se encarga de imprimir el personaje y de añadirle color en este caso amarillo.
+/// </summary>
 void PrintPersonaje()
 {
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x6);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_RED| 0x6);
 	cout << personaje;
 }
+/// <summary>
+/// ImprimirPantalla se encarga de imprimir el mapa con color azul y llamar a la funcion PrintPersonaje.
+/// </summary>
 void ImprimirPantalla() {
 	for (int i = 0; i < CONSOLE_HEIGHT; i++)
 	{
@@ -116,10 +143,10 @@ void ImprimirPantalla() {
 			}
 			else {
 				if (ConsoleScreen[i][j]==MAP_TILES::PUNTO) {
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_RED|7);
 				}
 				else {
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_RED |FOREGROUND_BLUE);
 				}
 				
 				cout << (char)ConsoleScreen[i][j];
@@ -129,26 +156,30 @@ void ImprimirPantalla() {
 		cout << endl;
 	}
 }
+/// <summary>
+/// Inputs es la funcion que hace que el personaje se pueda mover tanto con las teclas WASD y las flechas de direcciones.
+/// </summary>
 void Inputs() {
 	char input = toupper(_getch());
 	switch (input)
 	{
-	case 'H':
+	case 72:
 	case 'W':
 		inputs = INPUTS::UP;
 		break;
 	case 'A':
-	case 'K':
+	case 75:
 		inputs = INPUTS::LEFT;
 		break;
 	case 'S':
-	case 'P':
+	case 80:
 		inputs = INPUTS::DOWN;
 		break;
-	case 'M':
+	case 77:
 	case 'D':
 		inputs = INPUTS::RIGHT;
 		break;
+	case 27:
 	case 'Q':
 		inputs = INPUTS::QUIT;
 		break;
@@ -157,6 +188,9 @@ void Inputs() {
 		break;
 	}
 }
+/// <summary>
+/// La funcion Logica se encarga del movimiento del personaje, de la destruccion de los puntos una vez recogidos y de los teletransportes.
+/// </summary>
 void Logica() {
 	int personaje_x_new = personaje_x;
 	int personaje_y_new = personaje_y;
@@ -202,10 +236,16 @@ void Logica() {
 		ConsoleScreen[personaje_y_new][personaje_x_new] = MAP_TILES::EMPTY;
 	}
 }
+/// <summary>
+/// ShowScore es la funcion encargada de imprimir el score y el score restante.
+/// </summary>
 void ShowScore() {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 	cout << "SCORE: " << score << " SCORE RESTANTE :" << totalScore << ' ';
 }
+/// <summary> 
+/// ClearScreen es la funcion que mejora la recarga del terminal.
+/// </summary>
 void ClearScreen() {
 	COORD cursorPosition;	cursorPosition.X = 0;	cursorPosition.Y = 0;	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }
