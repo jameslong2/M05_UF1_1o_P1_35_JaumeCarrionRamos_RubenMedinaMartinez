@@ -159,111 +159,23 @@ void Inputs() {
 	}
 }
 void Logica() {
+	int personaje_x_new = personaje_x;
+	int personaje_y_new = personaje_y;
 	switch (inputs)
 	{
 	case NONE:
 		break;
 	case UP:
-		personaje_y--;
-		if (personaje_y == -1) {
-			switch (personaje_x) {
-				//hueco1
-			case 25:
-				personaje_y = CONSOLE_HEIGHT - 1;
-				break;
-			case 26:
-				personaje_y = CONSOLE_HEIGHT - 1;
-				break;
-				//hueco 2
-			case 52:
-				personaje_y = CONSOLE_HEIGHT - 1;
-				personaje_x = 66;
-				break;
-				//hueco 3
-			case 66:
-				personaje_y = CONSOLE_HEIGHT - 1;
-				personaje_x = 52;
-				break;
-				//hueco 4
-			case 92:
-				personaje_y = CONSOLE_HEIGHT - 1;
-				break;
-			case 93:
-				personaje_y = CONSOLE_HEIGHT - 1;
-				break;
-			}
-		}
-		if (ConsoleScreen[personaje_y][personaje_x] == MAP_TILES::WALL) {
-			personaje_y++;
-		}
+		personaje_y_new--;
 		break;
 	case DOWN:
-		personaje_y++;
-		if (personaje_y == CONSOLE_HEIGHT) {
-			switch (personaje_x) {
-				//hueco1
-			case 25:
-				personaje_y = 0;
-				break;
-			case 26:
-				personaje_y = 0;
-				break;
-				//hueco 2
-			case 52:
-				personaje_y = 0;
-				personaje_x = 66;
-				break;
-				//hueco 3
-			case 66:
-				personaje_y = 0;
-				personaje_x = 52;
-				break;
-				//hueco 4
-			case 92:
-				personaje_y = 0;
-				break;
-			case 93:
-				personaje_y = 0;
-				break;
-			}
-		}
-		if (ConsoleScreen[personaje_y][personaje_x] == MAP_TILES::WALL) {
-			personaje_y--;
-		}
+		personaje_y_new++;
 		break;
 	case RIGHT:
-		personaje_x++;
-		if (personaje_x == CONSOLE_WIDTH) {
-			switch (personaje_y)
-			{
-			case 10:
-				personaje_x = 0;
-				break;
-			case 18:
-				personaje_x = 0;
-				break;
-			}
-		}
-		if (ConsoleScreen[personaje_y][personaje_x] == MAP_TILES::WALL) {
-			personaje_x--;
-		}
+		personaje_x_new++;
 		break;
 	case LEFT:
-		personaje_x--;
-		if (personaje_x == -1) {
-			switch (personaje_y)
-			{
-			case 10:
-				personaje_x = CONSOLE_WIDTH - 1;
-				break;
-			case 18:
-				personaje_x = CONSOLE_WIDTH - 1;
-				break;
-			}
-		}
-		if (ConsoleScreen[personaje_y][personaje_x] == MAP_TILES::WALL) {
-			personaje_x++;
-		}
+		personaje_x_new--;
 		break;
 	case QUIT:
 		ejecutar = false;
@@ -271,10 +183,24 @@ void Logica() {
 	default:
 		break;
 	}
-	if (ConsoleScreen[personaje_y][personaje_x] == MAP_TILES::PUNTO) {
+	if (personaje_x_new<0) {
+		personaje_x_new = CONSOLE_WIDTH - 1;
+	}
+	if (personaje_y_new<0) {
+		personaje_y_new = CONSOLE_HEIGHT - 1;
+	}
+	personaje_x_new %= CONSOLE_WIDTH;
+	personaje_y_new %= CONSOLE_HEIGHT;
+	if (ConsoleScreen[personaje_y_new][personaje_x_new]==MAP_TILES::WALL) {
+		personaje_y_new = personaje_y;
+		personaje_x_new = personaje_x;
+	}
+	personaje_x = personaje_x_new;
+	personaje_y = personaje_y_new;
+	if (ConsoleScreen[personaje_y_new][personaje_x_new] == MAP_TILES::PUNTO) {
 		totalScore--;
 		score++;
-		ConsoleScreen[personaje_y][personaje_x] = MAP_TILES::EMPTY;
+		ConsoleScreen[personaje_y_new][personaje_x_new] = MAP_TILES::EMPTY;
 	}
 }
 void ShowScore() {
