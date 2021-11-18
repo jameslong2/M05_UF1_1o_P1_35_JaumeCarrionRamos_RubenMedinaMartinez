@@ -62,16 +62,15 @@ int main() {
 void Update() {
 	AddPointsToTotal();
 	while (ejecutar) {
-		
-		ClearScreen();
-		ImprimirPantalla();
-		Inputs();
-		Logica();
-		ShowScore();
 		if (totalScore <= 0) {
 			isWin = true;
 			ejecutar = false;
 		}
+		Inputs();
+		Logica();
+		ClearScreen();
+		ImprimirPantalla();
+		ShowScore();
 	}
 	if (isWin) {
 		PrintWinText();
@@ -205,7 +204,7 @@ void Logica() {
 }
 void ShowScore() {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-	cout << "SCORE: " << score << " SCORE RESTANTE :" << totalScore << ' ';
+	cout << "SCORE: " << score << " SCORE RESTANTE :" << totalScore << ' '<<endl;
 }
 void ClearScreen() {
 	COORD cursorPosition;	cursorPosition.X = 0;	cursorPosition.Y = 0;	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
